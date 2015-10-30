@@ -33,7 +33,11 @@ def update_cell(coordinates, decision)
   if decision == 'f'
     @grid[coordinates[0]][coordinates[1]].flag
   else
-    @grid[coordinates[0]][coordinates[1]].reveal
+    bomb_count = @grid[coordinates[0]][coordinates[1]].reveal
+    # unless bomb_count > 0
+    #   update_cell(neighbor_position, decision) unless bomb_count == :b
+    # end
+    bomb_count
   end
 end
 

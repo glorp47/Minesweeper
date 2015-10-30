@@ -20,10 +20,10 @@ class Player
     is_valid = false
     until is_valid
       puts "Enter coordinates of position you want to modify"
-      input = gets.chomp.split(",").map(&:to_i)
-      is_valid = (input.all? {|el| el.between?(0, size-1)} )
+      input = gets.chomp.split(",")
+      is_valid = (input.all? {|el| el.between?(0.to_s, (size-1).to_s)} )
     end
-    input
+    input.map(&:to_i)
   end
 
   def prompt_for_input(size)

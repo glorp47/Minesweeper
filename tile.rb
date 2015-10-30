@@ -23,12 +23,27 @@ attr_reader :value, :flagged, :revealed
 
   def reveal
     @revealed = true
+    if neighbors_bomb_count == 0
+      neighbor_positions.each do |neighbor|
+        current = @board.grid[neighbor[0]][neighbor[1]]
+        next if current.revealed || current.value == :b
+        current.reveal
+      end
+    end
     @value
   end
 
+  def neighbor_positions
+    possible_moves = [-1, -1, 0, 1, 1].permutation(2).to_a.uniq
+    result = []
+    possible_moves.each do |delta|
+      result << [@pos[0]+ delta[0], @pos[1]+delta[1]]
+    end
+    result.select! {|move| move[0].between?(0,8) && move[1].between?(0,8)}
+    result
+  end
+
   def neighbors
-    # gives us values from all adjacent tiles on the board
-    # returns an array of the values
     possible_moves = [-1, -1, 0, 1, 1].permutation(2).to_a.uniq
     result = []
     possible_moves.each do |delta|
@@ -44,7 +59,7 @@ attr_reader :value, :flagged, :revealed
 
   def to_s
     return 'F' if @flagged
-    @revealed ?  "#{self.neighbors_bomb_count}" :  @value
+    @revealed ?  "#{self.neighbors_bomb_count}" : @value
   end
 
 
