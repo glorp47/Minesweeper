@@ -1,3 +1,4 @@
+require 'byebug'
 class Tile
 attr_reader :value, :flagged, :revealed
   def initialize(value, board, pos)
@@ -22,12 +23,13 @@ attr_reader :value, :flagged, :revealed
 
   def reveal
     @revealed = true
+    @value
   end
 
   def neighbors
     # gives us values from all adjacent tiles on the board
     # returns an array of the values
-    possible_moves = [-1, -1, 0, 1, 1].permutation(2).to_a
+    possible_moves = [-1, -1, 0, 1, 1].permutation(2).to_a.uniq
     result = []
     possible_moves.each do |delta|
       result << [@pos[0]+ delta[0], @pos[1]+delta[1]]
@@ -42,7 +44,7 @@ attr_reader :value, :flagged, :revealed
 
   def to_s
     return 'F' if @flagged
-    @revealed ?  "#{self.neighbors_bomb_count}" :  "?"
+    @revealed ?  "#{self.neighbors_bomb_count}" :  @value
   end
 
 

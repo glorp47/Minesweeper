@@ -11,7 +11,7 @@ end
 def fill_board(bombs)
   #made array of values for Tiles, include a given number of bombs
   #then shuffled the array to randomize bomb locations
-  cell_array = Array.new(@grid.size ** 2) {0}
+  cell_array = Array.new(@grid.size ** 2) {"_"}
   0.upto(bombs) do |i|
     cell_array[i] = :b
   end
@@ -26,6 +26,14 @@ def fill_board(bombs)
       @grid[row_idx][col_idx] = Tile.new(cell_array[counter], self, [row_idx, col_idx])
       counter += 1
     end
+  end
+end
+
+def update_cell(coordinates, decision)
+  if decision == 'f'
+    @grid[coordinates[0]][coordinates[1]].flag
+  else
+    @grid[coordinates[0]][coordinates[1]].reveal
   end
 end
 
