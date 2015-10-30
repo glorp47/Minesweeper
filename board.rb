@@ -30,7 +30,14 @@ def fill_board(bombs)
 end
 
 def render
-  puts " #{(0...size).to_a.join(" ")}"
+  puts "   #{(0...@grid.size).to_a.join("  ")}"
+    @grid.each_with_index do |row, idx|
+      row.each_with_index do |cell, idx2|
+        print "#{idx} " if idx2 == 0
+        print "|#{cell.to_s}|"
+      end
+      puts ""
+    end
 end
 
 

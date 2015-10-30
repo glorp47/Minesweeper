@@ -16,6 +16,10 @@ attr_reader :value, :flagged, :revealed
     end
   end
 
+  def flag
+    @flagged ? @flagged = false : @flagged = true
+  end
+
   def reveal
     @revealed = true
   end
@@ -35,6 +39,13 @@ attr_reader :value, :flagged, :revealed
   def neighbors_bomb_count
     neighbors.count(:b)
   end
+
+  def to_s
+    return 'F' if @flagged
+    @revealed ?  "#{self.neighbors_bomb_count}" :  "?"
+  end
+
+
 
   # def inspect
   #   @value
