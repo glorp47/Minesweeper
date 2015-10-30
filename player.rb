@@ -11,7 +11,7 @@ class Player
     until is_valid
       puts "Enter 'r' to reveal location, enter 'f' to flag location"
       input = gets.chomp.downcase
-      is_valid = (input == 'f' || input == 'r')
+      is_valid = (input == 'f' || input == 'r' || input == 's')
     end
     input
   end
@@ -27,8 +27,8 @@ class Player
   end
 
   def prompt_for_input(size)
-    position = get_coordinates(size)
     decision = flag_or_reveal
+    position = get_coordinates(size)
     [decision, position]
   end
 end
