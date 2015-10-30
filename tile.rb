@@ -18,14 +18,14 @@ attr_reader :value, :flagged, :revealed
   end
 
   def flag
-    @flagged ? @flagged = false : @flagged = true
+    @flagged = !@flagged
   end
 
   def reveal
     @revealed = true
     if neighbors_bomb_count == 0
       neighbor_positions.each do |neighbor|
-        current = @board.grid[neighbor[0]][neighbor[1]]
+        current = @board[neighbor]
         next if current.revealed || current.value == :b
         current.reveal
       end
@@ -33,24 +33,26 @@ attr_reader :value, :flagged, :revealed
     @value
   end
 
+  def vectors
+    [-1, -1, 0, 1, 1].permutation(2).to_a.uniq
+  end
+
   def neighbor_positions
-    possible_moves = [-1, -1, 0, 1, 1].permutation(2).to_a.uniq
     result = []
-    possible_moves.each do |delta|
+    vectors.each do |delta|
       result << [@pos[0]+ delta[0], @pos[1]+delta[1]]
     end
-    result.select! {|move| move[0].between?(0,8) && move[1].between?(0,8)}
+    result = valid_positions(result)
     result
   end
 
+  def valid_positions(positions)
+    positions.select {|move| move[0].between?(0,@board.grid.size - 1) && move[1].between?(0,@board.grid.size - 1)}
+  end
+
   def neighbors
-    possible_moves = [-1, -1, 0, 1, 1].permutation(2).to_a.uniq
-    result = []
-    possible_moves.each do |delta|
-      result << [@pos[0]+ delta[0], @pos[1]+delta[1]]
-    end
-    result.select! {|move| move[0].between?(0,8) && move[1].between?(0,8)}
-    result.map{|position| @board.grid[position[0]][position[1]].value}
+    result = neighbor_positions
+    result.map{|position| @board[position].value}
   end
 
   def neighbors_bomb_count
@@ -61,12 +63,5 @@ attr_reader :value, :flagged, :revealed
     return 'F' if @flagged
     @revealed ?  "#{self.neighbors_bomb_count}" : @value
   end
-
-
-
-  # def inspect
-  #   @value
-  # end
-
 
 end
